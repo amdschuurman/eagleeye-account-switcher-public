@@ -1,0 +1,27 @@
+{
+  "_source": "Harvested 2026-10-23 from public overwatch.blizzard.com career pages (static.playoverwatch.com). URLs only; the images are Blizzard artwork and are fetched at runtime, never committed. Champion is Blizzard's Rank_UltimateTier; damage is role/offense.",
+  "tiers": {
+    "bronze": "https://static.playoverwatch.com/images/pages/career/icons/rank/Rank_BronzeTier.f46bc3540601455a7768761396f9310d805052ad.png",
+    "silver": "https://static.playoverwatch.com/images/pages/career/icons/rank/Rank_SilverTier.305e60dca5e95356ced59825426844cc7cdb4948.png",
+    "gold": "https://static.playoverwatch.com/images/pages/career/icons/rank/Rank_GoldTier.8d40eab551020b46a84002019dd98714149ed5e2.png",
+    "platinum": "https://static.playoverwatch.com/images/pages/career/icons/rank/Rank_PlatinumTier.694340e3a5b2031d4fac9eb1d8f52c6855d4c072.png",
+    "emerald": "https://static.playoverwatch.com/images/pages/career/icons/rank/Rank_EmeraldTier.d82e76cb2deeac6d1f4d4cf4d8914517d903eeeb.png",
+    "diamond": "https://static.playoverwatch.com/images/pages/career/icons/rank/Rank_DiamondTier.bc8c5d6005f916c62c51728087aeb26f4facaa9b.png",
+    "master": "https://static.playoverwatch.com/images/pages/career/icons/rank/Rank_MasterTier.d5994999a94e84aeff892ddc2df4019afe41bf59.png",
+    "grandmaster": "https://static.playoverwatch.com/images/pages/career/icons/rank/Rank_GrandmasterTier.cf8bc4567786439baf485ca6d63f6ff27fe4a281.png",
+    "champion": "https://static.playoverwatch.com/images/pages/career/icons/rank/Rank_UltimateTier.bc416c2102ab21d39b2398fdf7571cc56503ea2c.png"
+  },
+  "divisions": {
+    "1": "https://static.playoverwatch.com/images/pages/career/icons/rank/TierDivision_1.10f427bf8f2f16171ce550a90c29626b438f6efd.png",
+    "2": "https://static.playoverwatch.com/images/pages/career/icons/rank/TierDivision_2.0e5d1cfda796f7b4362ef2ffa8a1053c20afa5af.png",
+    "3": "https://static.playoverwatch.com/images/pages/career/icons/rank/TierDivision_3.e9d892e479ca14e5543e71762459d11674504ed0.png",
+    "4": "https://static.playoverwatch.com/images/pages/career/icons/rank/TierDivision_4.a86ba72795dcef9e04b6346163d3369eec13393f.png",
+    "5": "https://static.playoverwatch.com/images/pages/career/icons/rank/TierDivision_5.b1cc1770c12501c536e18127c83169f65e3e5de0.png"
+  },
+  "roles": {
+    "tank": "https://static.playoverwatch.com/images/pages/career/icons/role/tank.e363265db45af83a0a5613072d7a888b1bf8a5b5.svg",
+    "damage": "https://static.playoverwatch.com/images/pages/career/icons/role/offense.0f3b26f08388747909719cb6f8940d0b4683039e.svg",
+    "support": "https://static.playoverwatch.com/images/pages/career/icons/role/support.f4dbde20ae498cf0d6fd01e697fada8d99ec3a72.svg",
+    "open": "https://static.playoverwatch.com/images/pages/career/icons/role/open.a7d409c5697a3b4f179bfa34a209fd833c2ba6e8.svg"
+  }
+}

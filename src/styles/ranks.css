@@ -1,0 +1,196 @@
+/* Phase 2: ranks, categories, sort and filter. Same tokens and motion as app.css (fades 120 to 250 ms, closes faster).
+   UI colours come from palette.css and theme.css only. The only literals left are inside the rank art itself. */
+:root {
+  --rk-bg: var(--menu-bg);               /* the one menu and hover card surface, solid over busy cards */
+  --rk-line: var(--w-07);
+  --t-hover-in: 120ms;
+}
+
+/* ---- Rank art ---- */
+.tier-icon { display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.tier-img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+.role-icon { display: inline-grid; place-items: center; flex: none; color: var(--text-3); }
+.role-img { width: 100%; height: 100%; object-fit: contain; opacity: 0.72; }
+.emblem-blank { display: block; flex: none; }
+
+/* Tier crest over the division wings, number hexagon under the crest's point (as on the career page). */
+.emblem { position: relative; display: inline-block; flex: none; width: calc(var(--s) * 1.55); height: calc(var(--s) * 1.2); }
+.emblem-tier { position: absolute; z-index: 1; top: 0; left: 50%; transform: translateX(-50%); height: var(--s); width: auto; filter: drop-shadow(0 2px 4px var(--k-5)); }
+.emblem-div { position: absolute; z-index: 2; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; height: auto; }
+.emblem-tier-blank { position: absolute; top: 0; left: 50%; transform: translateX(-50%); }
+.emblem-div-blank {
+  position: absolute; z-index: 2; bottom: 0; left: 50%; transform: translateX(-50%); width: calc(var(--s) * 0.34); height: calc(var(--s) * 0.34);
+  display: grid; place-items: center; border-radius: 3px; background: var(--ee-active); border: 1px solid var(--w-34);
+  font: 700 calc(var(--s) * 0.2) / 1 var(--font-head); color: var(--text);
+}
+
+/* Predicted: a guess, so it is see-through and breathes softly */
+.is-predicted { display: inline-flex; animation: rk-pulse 2400ms var(--ease-in-out) infinite; }
+@keyframes rk-pulse { 0%, 100% { opacity: 0.38; } 50% { opacity: 0.68; } }
+.rk-tag {
+  display: inline-flex; align-items: center; height: 17px; padding: 0 6px; border-radius: 9px; flex: none;
+  background: var(--w-07); color: var(--text-4); font: 600 10px/1 var(--font-ui); letter-spacing: 0.04em; text-transform: uppercase;
+}
+.rk-tag.predicted { background: var(--accent-14); color: var(--ee-brand-word); }
+
+/* ---- Card badge (best role) ---- */
+.card-top { gap: 8px; }
+.card-top-right { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.card-top-right .dot { margin-top: 0; }
+.rank-badge {
+  display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px 0 5px; border-radius: 12px;
+  background: var(--w-055); color: var(--text-2); font: 600 11.5px/1 var(--font-ui); white-space: nowrap; min-width: 0; overflow: hidden;
+  animation: fade-in var(--t-in) var(--ease) both;
+}
+.rank-badge .tier-icon { margin: -2px 0; }
+.rank-badge.muted { color: var(--text-4); padding: 0 9px; background: var(--w-03); }
+.rank-badge.muted .ic { margin-left: -2px; }
+.rank-badge.predicted { color: var(--text-3); }
+.rank-badge.stale { color: var(--text-4); }
+.rank-badge.stale .tier-icon { filter: grayscale(1); opacity: 0.55; }
+
+/* ---- Toolbar: chips left, sort + filter right ---- */
+.heading { margin-bottom: 12px; }
+.toolbar { position: relative; z-index: 10; display: flex; align-items: center; gap: 12px; margin: 0 2px 14px; min-height: 30px; animation: fade-in var(--t-in) var(--ease) both; }
+.chips { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.chip {
+  height: 28px; padding: 0 11px; border-radius: 14px; display: inline-flex; align-items: center; gap: 7px;
+  background: var(--w-055); border: 1px solid var(--w-06); color: var(--text-3); font: 600 12.5px/1 var(--font-ui);
+  transition: background-color var(--t-quick) var(--ease), color var(--t-quick) var(--ease), border-color var(--t-quick) var(--ease), transform var(--t-quick) var(--ease);
+}
+.chip:hover { background: var(--w-09); color: var(--text); }
+button.chip:active { transform: scale(0.96); transition-duration: 80ms; }
+.chip.on { background: var(--accent-14); border-color: var(--accent-50); color: var(--text); }
+.chip-n { display: inline-block; font-weight: 400; color: var(--text-4); font-size: 11.5px; font-variant-numeric: tabular-nums; animation: count-in 240ms var(--ease) both; }
+@keyframes count-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.chip.on .chip-n { color: var(--ee-brand-word); }
+.filter-chip { padding: 0 4px 0 10px; color: var(--text-2); background: var(--w-07); cursor: default; animation: rise-in var(--t-in) var(--ease) both; }
+.filter-chip .role-icon, .filter-chip > .ic { color: var(--text-2); }
+.chip-x { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; color: var(--text-3); transition: background-color var(--t-quick) var(--ease); }
+.chip-x:hover { background: var(--w-14); color: var(--text); }
+
+.tools { display: flex; align-items: center; gap: 6px; flex: none; }
+.tool-wrap { position: relative; }
+.tool-btn {
+  height: 30px; padding: 0 10px; border-radius: 4px; display: inline-flex; align-items: center; gap: 7px; color: var(--text-3); font-size: 12.5px;
+  transition: background-color var(--t-quick) var(--ease), color var(--t-quick) var(--ease);
+}
+.tool-btn b { font-weight: 600; color: var(--text-2); }
+.tool-btn:hover, .tool-btn.open { background: var(--hover); color: var(--text); }
+.tool-btn:active { background: var(--w-12); }
+.tool-btn.active { color: var(--text-2); }
+.tool-btn .ic-chevronDown { transition: transform var(--t-quick) var(--ease); }
+.tool-btn.open .ic-chevronDown { transform: rotate(180deg); }
+.tool-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+
+.pop-anchor { position: absolute; top: calc(100% + 6px); right: 0; z-index: 45; }
+.pop-menu { position: static; min-width: 186px; transform-origin: top right; }
+.pop-menu button { gap: 9px; }
+.ctx-check { width: 14px; display: inline-grid; place-items: center; color: var(--orange); }
+.pop-menu button.checked { color: var(--text); }
+
+.filter-pop {
+  width: 430px; padding: 16px 16px 14px; background: var(--menu-bg); border: 1px solid var(--menu-border); border-radius: var(--menu-radius);
+  box-shadow: var(--menu-shadow); transform-origin: top right; animation: drop-in 190ms var(--ease) both;
+}
+.filter-title { font: 700 13px/1 var(--font-head); margin-bottom: 12px; }
+.seg { display: flex; gap: 2px; padding: 2px; border-radius: 4px; background: var(--ee-page); border: 1px solid var(--w-06); }
+.seg-btn {
+  flex: 1; height: 28px; border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+  color: var(--text-3); font-size: 11.5px; white-space: nowrap; transition: background-color var(--t-quick) var(--ease), color var(--t-quick) var(--ease);
+}
+.seg-btn:hover { color: var(--text); background: var(--w-055); }
+.seg-btn:active { background: var(--w-1); }
+.seg-btn.on { background: var(--accent-16); color: var(--text); box-shadow: inset 0 0 0 1px var(--accent-50); }
+.seg-btn.on .role-icon, .seg-btn.on .ic { color: var(--ee-brand-word); }
+.range { display: flex; gap: 10px; margin-top: 14px; }
+.rank-select { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.rank-select-label { color: var(--text-3); font-size: 12px; }
+.filter-foot { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.filter-hint { flex: 1; color: var(--text-4); font-size: 11.5px; line-height: 1.4; }
+.btn-orange.sm, .btn-grey.sm { height: 28px; padding: 0 14px; font-size: 12px; }
+
+/* Dark select with a crest on the left and our own chevron */
+.select-wrap { position: relative; display: flex; align-items: center; }
+.select-wrap > .tier-icon, .select-ic-blank { position: absolute; left: 7px; pointer-events: none; }
+.select-ic-blank { width: 18px; height: 18px; border-radius: 50%; border: 1px dashed var(--w-22); }
+.select-wrap > .ic-chevronDown { position: absolute; right: 9px; color: var(--text-3); pointer-events: none; }
+.select {
+  appearance: none; width: 100%; height: 32px; padding: 0 28px 0 34px; border-radius: 3px; background: var(--ee-input); color: var(--text);
+  border: 1px solid var(--ee-input-border); font: 12.5px var(--font-ui); color-scheme: dark; cursor: pointer;
+  transition: border-color var(--t-quick) var(--ease);
+}
+.select:hover:not(:disabled) { border-color: var(--ee-input-border-hover); }
+.select:focus { outline: none; border-color: var(--orange); }
+.select-wrap.div .select { padding-left: 11px; width: 58px; }
+.select-wrap.disabled { opacity: 0.4; }
+.select:disabled { cursor: default; }
+
+.no-match {
+  grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 4px; color: var(--text-3);
+  background: color-mix(in srgb, var(--ee-card) 40%, transparent); border: 1px dashed var(--w-1); animation: rise-in var(--t-in) var(--ease) both;
+}
+.no-match-ic { width: 28px; height: 28px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--w-06); color: var(--text-3); }
+.link-btn { color: var(--ee-link); font-weight: 600; border-radius: 2px; text-underline-offset: 2px; }
+.link-btn:hover { text-decoration: underline; }
+
+/* ---- Context menu additions ---- */
+.ctx-head { padding: 6px 16px 7px 14px; margin-bottom: 4px; border-bottom: 1px solid var(--menu-sep); color: var(--text-4); font-size: 11.5px; }
+.ctx-now { margin-left: auto; color: var(--text-4); font-size: 11px; }
+.ctx-menu button[aria-checked="true"]:disabled { color: var(--text-2); }
+.ctx-menu button[aria-checked="true"]:disabled .ic { color: var(--ee-brand-word); }
+
+/* ---- Edit ranks dialog ---- */
+.dialog.edit-ranks { width: 560px; }
+.er-intro { font-size: 12.5px; color: var(--text-3) !important; }
+.er-rows { margin-top: 16px; border-top: 1px solid var(--rk-line); }
+.er-row { display: grid; grid-template-columns: 124px 1fr auto; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--rk-line); }
+.er-role { display: flex; align-items: center; gap: 9px; font: 600 13px/1 var(--font-head); }
+.er-role .role-icon { color: var(--text-2); }
+.er-rank { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.er-rank > .select-wrap:not(.div) { flex: 1; min-width: 0; }
+.er-row.placing .select { border-color: var(--accent-45); }
+.er-place { font-size: 12.5px; padding: 0; }
+
+/* ---- Hover card (shared) ---- */
+.rank-layer { position: fixed; inset: 0; z-index: 35; pointer-events: none; }
+.rank-card {
+  position: fixed; color: var(--text); opacity: 0; font-size: 12.5px;
+  background: var(--rk-bg); border: 1px solid var(--menu-border); border-radius: var(--menu-radius); box-shadow: var(--menu-shadow);
+}
+.rank-card.shown { animation: rk-in var(--t-hover-in) var(--ease) both; }
+@keyframes rk-in { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+.rk-head { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.rk-name { font: 700 13.5px/1.2 var(--font-head); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rk-tagline { color: var(--text-4); font-size: 11.5px; white-space: nowrap; }
+.rk-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; color: var(--text-4); font-size: 11.5px; }
+.rk-foot > span:first-child { flex: none; white-space: nowrap; }
+.rk-foot > span:last-child { min-width: 0; text-align: right; }
+.rk-foot .stale { color: var(--warn-text); }
+.rk-private { display: flex; align-items: flex-start; gap: 11px; padding: 14px 2px; }
+.rk-private b { display: block; font: 600 13px/1.3 var(--font-ui); margin-bottom: 3px; }
+.rk-private-sub { display: block; color: var(--text-3); font-size: 12px; line-height: 1.45; }
+.rk-private-ic { width: 30px; height: 30px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--w-06); color: var(--text-3); }
+.rank-card.stale .tier-icon, .rank-card.stale .emblem { filter: grayscale(0.85); opacity: 0.6; }
+.k-unranked, .k-nodata { color: var(--text-4); }
+
+/* ---- A: compact tooltip ---- */
+.rank-a { width: 304px; padding: 12px 14px 10px; }
+.rank-a.side-right { transform-origin: left top; }
+.rank-a .rk-head { padding-bottom: 9px; border-bottom: 1px solid var(--rk-line); }
+.a-rows { padding: 4px 0; }
+.a-row { display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 4px 0; }
+.a-row + .a-row { border-top: 1px solid var(--w-035); }
+.a-crest { width: 32px; display: grid; place-items: center; flex: none; }
+.a-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.a-role { display: flex; align-items: center; gap: 8px; color: var(--text-4); font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; line-height: 1; }
+.a-rank { font-weight: 600; font-size: 12.5px; line-height: 1.25; color: var(--text); }
+.a-row.k-unranked .a-rank, .a-row.k-nodata .a-rank { color: var(--text-4); font-weight: 400; }
+.a-row.k-predicted .a-rank { color: var(--text-3); font-weight: 400; }
+.rank-a .rk-foot { padding-top: 9px; border-top: 1px solid var(--rk-line); }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .is-predicted { opacity: 0.5; }
+  .rank-card { opacity: 1; }
+}

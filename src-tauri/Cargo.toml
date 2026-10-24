@@ -1,0 +1,53 @@
+[package]
+name = "eagleeye-account-switcher"
+version = "1.0.0"
+description = "Fast Windows account switcher for Battle.net"
+license = "MIT"
+edition = "2021"
+rust-version = "1.77.2"
+
+[lib]
+name = "eagleeye_account_switcher_lib"
+crate-type = ["cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.5", features = [] }
+
+[dependencies]
+tauri = { version = "2.10", features = ["tray-icon", "protocol-asset"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+base64 = "0.22"
+# Log parsing (the signed-in account line) and the Battle.net log file names.
+regex = "1"
+# Atomic writes (temp file in the same dir, then persist by rename).
+tempfile = "3"
+# Overwatch ranks (ranks.rs, overfast.rs, icons.rs, battletag.rs): Battle.net's CachedData.db read
+# read-only for the BattleTag, the OverFast API and the one-time rank icon fetch over rustls.
+rusqlite = { version = "0.32", features = ["bundled"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "blocking"] }
+
+# Optional self-update (src/updater.rs). Off until you set an endpoint and public key in tauri.conf.json (README).
+tauri-plugin-updater = "2"
+tokio = { version = "1", features = ["time"] }
+
+# Registry (UnifiedAuth), DPAPI vault, process control and single-instance focus.
+[target.'cfg(windows)'.dependencies]
+tauri-plugin-single-instance = "2"
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_System_Threading",
+    "Win32_System_Registry",
+    "Win32_Security_Cryptography",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_HiDpi",
+] }
+
+[profile.release]
+opt-level = "s"
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true
+incremental = false

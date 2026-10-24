@@ -1,0 +1,77 @@
+/* EagleEye theme layer. palette.css is the single colour source (--ee-*, imported first in main.tsx). This file only
+   (1) gives the --ee-* roles the short names the rest of the styles use, (2) names the white and black wash levels drawn
+   over surfaces, (3) names a few status tints, the floating layer colours and the scroll bar colours.
+   Order in main.tsx: palette.css, this file, app.css, ranks.css.
+   LOGO LAW: the black-body logo sits on the one flat ground (--ee-ground, no band, no lift); never recolour, invert
+   or plate it. */
+:root {
+  /* surfaces */
+  --bg: var(--ee-ground);  /* the one flat ground: title bar and page */
+  --bar: var(--ee-card-head);
+  --line: var(--ee-divider);
+  --hover: var(--w-08);
+  /* text */
+  --text: var(--ee-text);
+  --text-2: var(--ee-text-2);
+  --text-3: var(--ee-text-3);
+  /* accent and status */
+  --orange: var(--ee-accent);
+  --orange-hi: var(--ee-accent-hover);
+  --orange-lo: var(--ee-accent-pressed);
+  --orange-busy: var(--ee-accent-disabled);
+  --red: var(--ee-danger);
+  --font-ui: var(--ee-font-body);
+  --font-head: var(--ee-font-display);
+
+  /* mask colour for alpha masks (only its alpha matters) */
+  --ee-mask: #000;
+
+  /* status text lightened for dark surfaces, and the window close red; kept as literals on purpose */
+  --lx-danger-text: #ff8a8d;
+  --lx-warn-text: #ffcf8a;
+  --lx-ok-text: #8ad8a0;
+  --lx-close-hover: #c42b1c;
+
+  /* white wash levels (white at this alpha over the surface) */
+  --w-03: rgba(255, 255, 255, 0.03);
+  --w-035: rgba(255, 255, 255, 0.035);
+  --w-04: rgba(255, 255, 255, 0.04);
+  --w-055: rgba(255, 255, 255, 0.055);
+  --w-06: rgba(255, 255, 255, 0.06);
+  --w-07: rgba(255, 255, 255, 0.07);
+  --w-08: rgba(255, 255, 255, 0.08);
+  --w-09: rgba(255, 255, 255, 0.09);
+  --w-1: rgba(255, 255, 255, 0.1);
+  --w-12: rgba(255, 255, 255, 0.12);
+  --w-14: rgba(255, 255, 255, 0.14);
+  --w-16: rgba(255, 255, 255, 0.16);
+  --w-18: rgba(255, 255, 255, 0.18);
+  --w-2: rgba(255, 255, 255, 0.2);
+  --w-22: rgba(255, 255, 255, 0.22);
+  --w-25: rgba(255, 255, 255, 0.25);
+  --w-34: rgba(255, 255, 255, 0.34);
+  --w-65: rgba(255, 255, 255, 0.65);
+  --w-8: rgba(255, 255, 255, 0.8);
+
+  /* black wash levels */
+  --k-2: rgba(0, 0, 0, 0.2);
+  --k-3: rgba(0, 0, 0, 0.3);
+  --k-5: rgba(0, 0, 0, 0.5);
+  --k-55: rgba(0, 0, 0, 0.55);
+  --k-6: rgba(0, 0, 0, 0.6);
+  --k-7: rgba(0, 0, 0, 0.7);
+}
+
+/* Floating layers and menu colours */
+:root {
+  --z-overlay: 1000;
+  --menu-bg: var(--ee-input); --menu-border: var(--w-08); --menu-radius: 4px; --menu-shadow: 0 12px 34px var(--k-6);
+  --menu-text: var(--ee-text-2); --menu-text-hover: var(--ee-text); --menu-hover: var(--w-08); --menu-disabled: var(--ee-text-4);
+  --menu-sep: var(--w-08); --menu-muted: var(--text-3);
+}
+
+/* Scroll bars: a thin thumb with no track */
+:root {
+  --scroll-thumb: var(--w-12);
+  --scroll-thumb-hover: var(--w-2);
+}

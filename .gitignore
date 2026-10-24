@@ -1,0 +1,16 @@
+# Build output and dependencies
+node_modules
+dist/
+target/
+*.exe
+
+# Scratch: screenshots, rank icons for the preview, experiments
+temp/
+
+# Secrets
+.env
+*.env
+*.key
+
+# Machine-local data (never committed)
+private/

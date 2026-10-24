@@ -1,0 +1,34 @@
+{
+  "name": "eagleeye-account-switcher",
+  "version": "1.0.0",
+  "description": "Fast Windows account switcher for Battle.net",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 1421 --strictPort",
+    "tauri": "tauri",
+    "test:shots": "node tests/shots.mjs",
+    "icons": "node tools/fetch-rank-icons.mjs",
+    "shots:readme": "node tests/readme-shots.mjs"
+  },
+  "dependencies": {
+    "@fontsource/montserrat": "^5.0.19",
+    "@fontsource/noto-sans": "^5.0.22",
+    "@tauri-apps/api": "^2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "playwright-core": "1.59.1",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.8"
+  }
+}

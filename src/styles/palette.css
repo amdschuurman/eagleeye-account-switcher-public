@@ -1,0 +1,55 @@
+/* EagleEye palette: the single colour source. Every other style file uses these --ee-* names (directly or through
+   theme.css) and contains no colour literals of its own.
+   A moody blue-black charcoal ladder modelled on Battle.net's surface levels (steps of +5, +7, +7), with EagleEye
+   orange where Battle.net uses blue, for actions only.
+
+   LOGO: the EagleEye logo is the original black-body mark (#080606 body, orange eye). It is never recoloured, inverted,
+   outlined, glowed or put on a plate. It sits on the one dark ground, --ee-ground #1d1e24.
+
+   Text contrast (WCAG, white at the stated alpha over the surface): --ee-text-3 on --ee-card 9.0, on --ee-active 7.8;
+   --ee-text-4 on --ee-card 4.8 (AA for normal text). */
+:root {
+  /* surfaces, darkest to lightest */
+  --ee-input: #121318;        /* inputs, selects, menus, hover cards */
+  --ee-deep: #15161b;         /* deepest panels: settings, popovers */
+  --ee-page: #1a1b21;         /* modal page */
+  --ee-ground: #1d1e24;       /* the one window ground the logo sits on */
+  --ee-ground-end: #121318;   /* the dark end of the window gradient (bottom right) */
+  --ee-card: #1f2027;         /* card body */
+  --ee-card-head: #26272e;    /* card hover, menu hover */
+  --ee-active: #2d2e36;       /* selected card, active item */
+
+  /* lines (white at fixed opacities) */
+  --ee-divider: rgba(255, 255, 255, 0.12);
+  --ee-input-border: rgba(255, 255, 255, 0.36);
+  --ee-input-border-hover: rgba(255, 255, 255, 0.84);
+
+  /* text */
+  --ee-text: #ffffff;
+  --ee-text-2: rgba(255, 255, 255, 0.84);
+  --ee-text-3: rgba(255, 255, 255, 0.72);   /* labels, descriptions */
+  --ee-text-4: rgba(255, 255, 255, 0.48);   /* idle tabs, faint icons */
+
+  /* accent: EagleEye orange (action only) */
+  --ee-accent: #f07e0f;          /* focus, primary fill */
+  --ee-accent-hover: #ff9324;
+  --ee-accent-pressed: #c96305;
+  --ee-accent-disabled: #6b3a0e;
+  --ee-brand-word: #f8901a;      /* the amber of the eagle's eye: the app name and small accent words */
+  --ee-link: #ff9a3d;            /* inline links on dark, lighter than the fill for legibility */
+  --ee-on-accent: #ffffff;       /* text and icons on the accent fill */
+
+  /* status */
+  --ee-success: #70d929;
+  --ee-warning: #ffb400;
+  --ee-danger: #e5484d;
+
+  /* glow (amber top, ember lower). Premultiplied over the ground, so every stop fades to the ground's own hue as alpha
+     falls, never to grey or black. Used by the signed-in card. */
+  --ee-glow-top: rgba(246, 134, 30, 0.36);
+  --ee-glow-low: rgba(150, 44, 12, 0.24);
+
+
+  --ee-font-display: "Montserrat", "Noto Sans", system-ui, sans-serif;
+  --ee-font-body: "Noto Sans", "Segoe UI", system-ui, sans-serif;
+}
