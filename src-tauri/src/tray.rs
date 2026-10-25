@@ -52,6 +52,7 @@ pub fn show_main<R: Runtime>(app: &AppHandle<R>) {
         let _ = win.unminimize();
         let _ = win.set_focus();
     }
+    crate::presence::set_visible(app, true);
 }
 
 /// Called after every switch (UI or tray) with its result.
@@ -62,6 +63,7 @@ pub fn after_switch<R: Runtime>(app: &AppHandle<R>, result: &SwitchResult) {
             if let Some(win) = app.get_webview_window("main") {
                 let _ = win.hide();
             }
+            crate::presence::set_visible(app, false);
         }
         Some(false) => app.exit(0),
         None => {}
@@ -107,7 +109,9 @@ fn on_menu<R: Runtime>(app: &AppHandle<R>, event: MenuEvent) {
             // a second click while one runs.
             std::thread::spawn(move || {
                 let be = app.state::<Arc<Backend>>().inner().clone();
+                let presence = crate::presence::busy(&app, crate::presence::Doing::Switching);
                 let result = be.switch_account(&code, &TrayEmitter(app.clone()));
+                drop(presence);
                 after_switch(&app, &result);
                 if result.status == "done" {
                     crate::battletag::after_sign_in(&app, &code);
@@ -151,6 +155,7 @@ pub fn on_window_event<R: Runtime>(window: &Window<R>, event: &WindowEvent) {
         if window.label() == "main" && window.state::<Arc<Backend>>().get_settings().minimize_to_tray {
             api.prevent_close();
             let _ = window.hide();
+            crate::presence::set_visible(window.app_handle(), false);
         }
     }
 }

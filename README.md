@@ -16,8 +16,7 @@ lobby at a glance.
 
 > **Looking for the official version?** This repository is the open-source edition. The official EagleEye Account
 > Switcher comes through the free [EagleEye launcher](https://games.eagleeye.ro/download): it always has the newest
-> version, updates itself, and gets extra features first (for example showing in Discord while it is open). Open the
-> launcher's SOFTWARE tab and click Install.
+> version, updates itself, and gets new features first. Open the launcher's SOFTWARE tab and click Install.
 
 ## Features
 
@@ -33,6 +32,9 @@ lobby at a glance.
 - **Closes the game for you.** If a Blizzard game is running when you switch, it is closed first.
 - **Switch from the tray.** The tray icon's menu lists every saved account; pick one to switch without opening the
   window.
+- **Shows in Discord.** While the window is open, Discord lists "EagleEye Account Switcher" on your profile like a
+  game ("Managing Battle.net accounts", "Switching accounts"). It never shows an account name, BattleTag or email,
+  only how many accounts you have saved. Turn it off in Settings with "Discord Rich Presence".
 - **Import from TcNo.** Already using TcNo Account Switcher? Your Battle.net accounts can be brought over in one go.
 - **Platforms.** The back button opens a Platforms page with every platform the switcher handles. Today that is
   Battle.net; the page is built so another platform can be added the same way.
@@ -58,7 +60,7 @@ lobby at a glance.
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/settings.webp" alt="Settings: Battle.net folder, close after switch, and the note that updates are not set up in this build" width="760">
+  <img src="docs/screenshots/settings.webp" alt="Settings: Battle.net folder, close after switch, Discord Rich Presence, and the note that updates are not set up in this build" width="760">
   <br><em>Settings.</em>
 </p>
 
@@ -100,6 +102,10 @@ More detail for the curious: [docs/RESEARCH.md](docs/RESEARCH.md).
   profile of each BattleTag. OverFast is a free, open-source (MIT) third-party service that reads Blizzard's public
   career pages; it is not run by this project. Only the BattleTag is sent. You can point the app at your own OverFast
   instance in `settings.json`.
+- Discord presence talks only to the Discord app on your own PC (its local pipe), with no bot, token or login. It
+  sends fixed text and the number of saved accounts, never an account name, BattleTag, email or account code. The
+  Discord application id in `src-tauri/src/presence.rs` is a public id, the same kind every Rich Presence app ships
+  (TcNo Account Switcher does the same). Set `APP_ID` to `""` to build without it, or to your own application id.
 - Rank icons and player icons are downloaded from Blizzard the first time they are needed and cached in the same
   folder.
 

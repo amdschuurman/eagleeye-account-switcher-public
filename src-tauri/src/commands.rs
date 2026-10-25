@@ -60,12 +60,14 @@ pub async fn switch_account(
     let be = state.inner().clone();
     let handle = app.clone();
     let code_for_ranks = code.clone();
+    let presence = crate::presence::busy(&handle, crate::presence::Doing::Switching);
     let result = tauri::async_runtime::spawn_blocking(move || {
         let emit = AppEmitter { app };
         be.switch_account(&code, &emit)
     })
     .await
     .map_err(|_| "switch task failed".to_string())?;
+    drop(presence);
     // closeAfterSwitch: hide to the tray or exit after a successful switch.
     crate::tray::after_switch(&handle, &result);
     // Ranks: store the BattleTag and refresh the account just signed in.
@@ -80,6 +82,7 @@ pub async fn switch_account(
 pub async fn add_account(app: AppHandle, state: State<'_, Arc<Backend>>) -> Result<AccountView, String> {
     let be = state.inner().clone();
     let handle = app.clone();
+    let _presence = crate::presence::busy(&handle, crate::presence::Doing::Adding);
     let acc = tauri::async_runtime::spawn_blocking(move || {
         let emit = AppEmitter { app };
         be.add_account(&emit)
@@ -98,6 +101,7 @@ pub fn cancel_add(state: State<'_, Arc<Backend>>) {
 pub async fn save_current(app: AppHandle, state: State<'_, Arc<Backend>>) -> Result<AccountView, String> {
     let be = state.inner().clone();
     let handle = app.clone();
+    let _presence = crate::presence::busy(&handle, crate::presence::Doing::Adding);
     let acc = tauri::async_runtime::spawn_blocking(move || {
         let emit = AppEmitter { app };
         be.save_current(&emit)
@@ -115,12 +119,16 @@ pub async fn import_tcno(
 ) -> Result<ImportSummary, String> {
     let be = state.inner().clone();
     let skip = skip.unwrap_or_default();
-    tauri::async_runtime::spawn_blocking(move || {
+    let handle = app.clone();
+    let summary = tauri::async_runtime::spawn_blocking(move || {
         let emit = AppEmitter { app };
         be.import_tcno(&skip, &emit)
     })
     .await
-    .map_err(|_| "import task failed".to_string())?
+    .map_err(|_| "import task failed".to_string())?;
+    // The saved account count in the Discord activity.
+    crate::presence::refresh(&handle);
+    summary
 }
 
 #[tauri::command]
@@ -134,8 +142,9 @@ pub fn rename_account(code: String, label: String, state: State<'_, Arc<Backend>
 }
 
 #[tauri::command]
-pub fn remove_account(code: String, state: State<'_, Arc<Backend>>) -> Result<(), String> {
+pub fn remove_account(code: String, app: AppHandle, state: State<'_, Arc<Backend>>) -> Result<(), String> {
     state.remove_account(&code)?;
+    crate::presence::refresh(&app);
     // Phase 2 data of the account goes with it.
     let _ = crate::ranks::forget(&state.paths, &code);
     let path = state.paths.meta_json();
@@ -158,8 +167,11 @@ pub fn get_settings(state: State<'_, Arc<Backend>>) -> Settings {
 }
 
 #[tauri::command]
-pub fn set_settings(settings: Settings, state: State<'_, Arc<Backend>>) -> Result<(), String> {
-    state.set_settings(&settings)
+pub fn set_settings(settings: Settings, app: AppHandle, state: State<'_, Arc<Backend>>) -> Result<(), String> {
+    state.set_settings(&settings)?;
+    // "Discord Rich Presence" applies at once.
+    crate::presence::refresh(&app);
+    Ok(())
 }
 
 // ---- Phase 2: Overwatch ranks and categories (DESIGN.md section 3) ------------------------------

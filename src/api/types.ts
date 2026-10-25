@@ -36,6 +36,7 @@ export interface Settings {
   closeAfterSwitch: boolean;
   minimizeToTray: boolean;
   overfastUrl?: string; // phase 2, default https://overfast-api.tekrop.fr
+  discordPresence: boolean; // show the app in Discord while its window is open (default true)
 }
 
 // ---- Phase 2 ranks (DESIGN.md "Phase 2 command contract") ----

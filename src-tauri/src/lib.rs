@@ -2,7 +2,8 @@
 //! `store` (accounts.json + settings.json), `vault` (DPAPI token files), `config` (Battle.net.config
 //! editing), `registry` (UnifiedAuth), `procs` (process control), `logwatch` (the sign-in line),
 //! `engine` (the switch/add/save/import state machine), `commands` (the Tauri surface), `tray`
-//! (tray icon, close-to-tray, close after switch) and `updater` (optional updates, offered, never forced).
+//! (tray icon, close-to-tray, close after switch), `updater` (optional updates, offered, never forced) and
+//! `presence` (Discord Rich Presence while the window is shown).
 
 mod atomic;
 mod avatars;
@@ -15,6 +16,7 @@ mod icons;
 mod logwatch;
 mod overfast;
 mod paths;
+mod presence;
 mod procs;
 mod ranks;
 mod registry;
@@ -75,6 +77,9 @@ pub fn run() {
             use tauri::Manager as _;
             let updates_on = updater::configured(app.config().plugins.0.get("updater"));
             app.manage(Arc::new(updater::Updater::new(&app.package_info().version.to_string(), updates_on)));
+            // Discord presence: inert while presence::APP_ID is empty. The window starts shown.
+            app.manage(Arc::new(presence::Presence::start()));
+            presence::set_visible(app.handle(), true);
             tray::create(app.handle())?;
             updater::start(app.handle());
             Ok(())
@@ -105,6 +110,12 @@ pub fn run() {
             commands::check_update,
             commands::install_update,
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running EagleEye Account Switcher");
+        .build(tauri::generate_context!())
+        .expect("error while running EagleEye Account Switcher")
+        .run(|app, event| {
+            // Clear the Discord activity before the process goes (best effort, at most half a second).
+            if let tauri::RunEvent::Exit = event {
+                presence::shutdown(app);
+            }
+        });
 }

@@ -132,7 +132,7 @@ export function ConfirmRemove() {
   );
 }
 
-/** Small settings panel under the cog: Battle.net folder, what happens after a switch, and updates. */
+/** Small settings panel under the cog: Battle.net folder, what happens after a switch, Discord presence and updates. */
 export function SettingsPanel() {
   const open = useApp((s) => s.settingsOpen);
   const settings = useApp((s) => s.settings);
@@ -175,6 +175,12 @@ export function SettingsPanel() {
             onChange={(e) => settings && void save({ ...settings, closeAfterSwitch: e.target.checked })} />
           <span className="box"><Icon name="check" size={12} stroke={2.6} /></span>
           <span>Close this window after a switch</span>
+        </label>
+        <label className="check">
+          <input type="checkbox" checked={settings?.discordPresence ?? true} disabled={!settings}
+            onChange={(e) => settings && void save({ ...settings, discordPresence: e.target.checked })} />
+          <span className="box"><Icon name="check" size={12} stroke={2.6} /></span>
+          <span>Discord Rich Presence</span>
         </label>
         <div className="settings-sep" />
         <UpdateRow />

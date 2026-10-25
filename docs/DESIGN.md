@@ -36,7 +36,7 @@ Everything lives in `%APPDATA%\EagleEye Account Switcher\`, on the user's own PC
 |---|---|
 | `accounts.json` | The non-secret list: per account its `code` (8 hex Battle.net account code), `label`, `battletag`, masked email (`ke***@g***.com`), `order`, `lastUsed`, `status` (`ready` or `needs_login`) |
 | `vault\<code>.bin` | Windows DPAPI (`CryptProtectData`, current user, app-specific entropy) over `{email, uaName, uaValue, capturedAt}`. Written atomically. Never logged, never printed |
-| `settings.json` | Battle.net folder, close after switch, minimise to tray, OverFast URL |
+| `settings.json` | Battle.net folder, close after switch, minimise to tray, Discord Rich Presence, OverFast URL |
 | `meta.json` | Per account category (Main or Smurf) |
 | `ranks.json` | Cached rank lookups, player icon URLs and manual rank overrides |
 | `icons\` | Rank icons and player icons fetched from Blizzard at runtime |
@@ -142,6 +142,27 @@ Events: `switch-progress` `{code, stage, ms}` (stages `closing_game`, `closing`,
 - Motion: fades and short slides, 150 to 250 ms, closing faster than opening, all of it off under reduced motion.
   Sort, filter and tab changes animate the cards to their new places (FLIP, transform only, skipped above 60 cards);
   a page change is a short crossfade with a slight slide in the direction of travel.
+
+## Discord presence
+
+While the main window is shown, Discord lists the app like a game (Rich Presence), `src-tauri/src/presence.rs`.
+
+- Shown: idle = "Managing Battle.net accounts" / "Overwatch, N accounts saved" ("1 account saved", "no accounts saved
+  yet"). During a switch (UI or tray) = "Switching accounts" / "Signing in to Battle.net". While adding or saving the
+  current account = "Adding an account" / "Waiting for the Battle.net login". Large image the EagleEye logo. The
+  elapsed timer starts when the window is shown.
+- Privacy rule: other people see this, so the activity never carries an account label, BattleTag, email or account
+  code. Only fixed text and the saved account count.
+- No bot and no token: plain Rich Presence over the local Discord pipe. `presence::APP_ID` is the public Discord
+  application id ("EagleEye Account Switcher") whose Rich Presence art has the keys `eagleeye`, `battlenet` and
+  `overwatch`. An application id is not a secret; every Rich Presence app ships one. Empty = fully inert (no thread,
+  no pipe access). A fork can put in its own application id and upload its own art under those keys.
+- Visible only while the window is shown: cleared when it hides to the tray and before exit (best effort, half a
+  second; Discord also drops it when the pipe closes). Setting "Discord Rich Presence" (`discordPresence`,
+  default on) applies at once.
+- Connection: one thread owns the pipe `\\.\pipe\discord-ipc-0..9` (minimal IPC: u32 op + u32 length, little-endian,
+  then JSON; handshake op 0, SET_ACTIVITY op 1). The app only posts to a channel, so nothing waits on Discord. Never
+  starts Discord; retries 15 s doubling to 2 min; identical activities are not resent; at most one SET_ACTIVITY per 2 s.
 
 ## Updates
 

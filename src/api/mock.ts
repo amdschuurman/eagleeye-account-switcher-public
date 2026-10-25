@@ -97,7 +97,7 @@ export function createMockApi(): Api {
   const ranks: Record<string, RankInfo> = {};
   accounts.forEach((a, i) => { ranks[a.code] = { battletag: a.battletag ?? "", ...FAKE_RANKS[i](now0), avatarFile: q.has("noavatars") ? null : MOCK_AVATARS[i % MOCK_AVATARS.length] }; });
   let current: string | null = q.has("empty") ? fakeCode(0) : accounts[0]?.code ?? null;
-  let settings: Settings = { battlenetPath: "C:\\Program Files (x86)\\Battle.net", closeAfterSwitch: false, minimizeToTray: false };
+  let settings: Settings = { battlenetPath: "C:\\Program Files (x86)\\Battle.net", closeAfterSwitch: false, minimizeToTray: false, discordPresence: true };
   let switching = false;
   let addCancel: (() => void) | null = null;
   let tcno = q.has("empty") ? TCNO.length : 0;

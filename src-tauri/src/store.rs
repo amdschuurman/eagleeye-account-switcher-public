@@ -46,6 +46,13 @@ pub struct Settings {
     /// Base URL of the OverFast API the rank lookups use (no trailing slash needed).
     #[serde(default = "default_overfast_url")]
     pub overfast_url: String,
+    /// Show the app in Discord (Rich Presence) while its window is open. On by default.
+    #[serde(default = "default_true")]
+    pub discord_presence: bool,
+}
+
+fn default_true() -> bool {
+    true
 }
 
 /// The public OverFast instance.
@@ -62,6 +69,7 @@ impl Default for Settings {
             close_after_switch: false,
             minimize_to_tray: false,
             overfast_url: default_overfast_url(),
+            discord_presence: true,
         }
     }
 }
@@ -256,6 +264,17 @@ mod tests {
         let blank = Settings { overfast_url: "  ".into(), ..Default::default() };
         assert_eq!(blank.overfast_base(), DEFAULT_OVERFAST_URL);
         assert!(serde_json::to_string(&Settings::default()).unwrap().contains("\"overfastUrl\""));
+    }
+
+    #[test]
+    fn discord_presence_defaults_on_and_old_files_still_load() {
+        assert!(Settings::default().discord_presence);
+        // A settings.json written before the Discord presence setting existed: it defaults to on.
+        let s: Settings = serde_json::from_str(r#"{"closeAfterSwitch":true,"minimizeToTray":true}"#).unwrap();
+        assert!(s.discord_presence);
+        let off: Settings = serde_json::from_str(r#"{"discordPresence":false}"#).unwrap();
+        assert!(!off.discord_presence);
+        assert!(serde_json::to_string(&Settings::default()).unwrap().contains("\"discordPresence\":true"));
     }
 
     #[test]
